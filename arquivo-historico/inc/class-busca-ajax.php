@@ -183,7 +183,7 @@ class Arquivo_Historico_Busca {
 		$like_data    = $wpdb->esc_like( '_transient_ah_busca_' ) . '%';
 		$like_timeout = $wpdb->esc_like( '_transient_timeout_ah_busca_' ) . '%';
 		$sql          = $wpdb->prepare( "DELETE FROM {$wpdb->options} WHERE option_name LIKE %s OR option_name LIKE %s", $like_data, $like_timeout );
-		$wpdb->query( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
 	}
 
 	/**

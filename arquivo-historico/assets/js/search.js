@@ -10,6 +10,21 @@
 		return $('<div>').text(text || '').html();
 	}
 
+	function sanitizeHighlightHtml(html) {
+		var wrapper = document.createElement('div');
+		wrapper.innerHTML = String(html || '');
+		wrapper.querySelectorAll('*').forEach(function (node) {
+			if (node.tagName !== 'MARK') {
+				node.replaceWith(document.createTextNode(node.textContent || ''));
+			} else {
+				Array.prototype.slice.call(node.attributes).forEach(function (attr) {
+					node.removeAttribute(attr.name);
+				});
+			}
+		});
+		return wrapper.innerHTML;
+	}
+
 	function setView(view) {
 		currentView = view === 'list' ? 'list' : 'grid';
 		if (!$results.length) {
@@ -29,7 +44,7 @@
 	function buildCard(item) {
 		var thumb = item.thumb ? '<img loading="lazy" alt="' + escapeHtml(item.titulo) + '" src="' + escapeHtml(item.thumb) + '">' : '';
 		var download = item.pdf ? '<a class="button" href="' + escapeHtml(item.pdf) + '" download>Download</a>' : '';
-		return '<article class="document-card"><a href="' + escapeHtml(item.link) + '">' + thumb + '</a><div class="document-card-body"><h3><a href="' + escapeHtml(item.link) + '">' + item.titulo + '</a></h3><p class="document-meta">' + escapeHtml(item.data || '') + '</p><p>' + item.resumo + '</p><p><a class="button" href="' + escapeHtml(item.link) + '">Ver documento</a> ' + download + '</p></div></article>';
+		return '<article class="document-card"><a href="' + escapeHtml(item.link) + '">' + thumb + '</a><div class="document-card-body"><h3><a href="' + escapeHtml(item.link) + '">' + sanitizeHighlightHtml(item.titulo) + '</a></h3><p class="document-meta">' + escapeHtml(item.data || '') + '</p><p>' + sanitizeHighlightHtml(item.resumo) + '</p><p><a class="button" href="' + escapeHtml(item.link) + '">Ver documento</a> ' + download + '</p></div></article>';
 	}
 
 	function renderResults(data) {
