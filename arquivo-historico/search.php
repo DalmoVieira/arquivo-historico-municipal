@@ -6,6 +6,7 @@
  */
 
 get_header();
+global $wp_query;
 $termo = get_search_query();
 ?>
 <section class="hero">
