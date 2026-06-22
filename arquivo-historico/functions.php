@@ -82,6 +82,23 @@ add_action( 'wp_enqueue_scripts', 'arquivo_historico_enqueue_assets' );
 add_action( 'admin_enqueue_scripts', 'arquivo_historico_enqueue_assets' );
 
 /**
+ * Adiciona atributos de segurança em scripts externos.
+ *
+ * @param string $tag    Tag do script.
+ * @param string $handle Handle do script.
+ * @param string $src    URL de origem.
+ * @return string
+ */
+function arquivo_historico_script_loader_tag( $tag, $handle, $src ) {
+	if ( 'pdfjs' === $handle ) {
+		$integrity = 'sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb';
+		$tag       = '<script src="' . esc_url( $src ) . '" integrity="' . esc_attr( $integrity ) . '" crossorigin="anonymous"></script>';
+	}
+	return $tag;
+}
+add_filter( 'script_loader_tag', 'arquivo_historico_script_loader_tag', 10, 3 );
+
+/**
  * Tipos MIME aceitos.
  *
  * @param array $mimes Tipos atuais.

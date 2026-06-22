@@ -239,6 +239,7 @@ class Arquivo_Historico_CPT {
 		}
 
 		$periodo_atual = isset( $_GET['filtro_periodo_doc'] ) ? sanitize_text_field( wp_unslash( $_GET['filtro_periodo_doc'] ) ) : '';
+		wp_nonce_field( 'arquivo_historico_filtro_periodo', 'arquivo_historico_filtro_periodo_nonce' );
 		echo '<select name="filtro_periodo_doc">';
 		echo '<option value="">' . esc_html__( 'Todos os períodos', 'arquivo-historico' ) . '</option>';
 		for ( $ano = 1800; $ano <= 2020; $ano += 10 ) {
@@ -260,7 +261,9 @@ class Arquivo_Historico_CPT {
 			return;
 		}
 
-		if ( isset( $_GET['post_type'], $_GET['filtro_periodo_doc'] ) && 'documento' === $_GET['post_type'] && '' !== $_GET['filtro_periodo_doc'] ) {
+		$nonce_valido = isset( $_GET['arquivo_historico_filtro_periodo_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['arquivo_historico_filtro_periodo_nonce'] ) ), 'arquivo_historico_filtro_periodo' );
+
+		if ( $nonce_valido && isset( $_GET['post_type'], $_GET['filtro_periodo_doc'] ) && 'documento' === $_GET['post_type'] && '' !== $_GET['filtro_periodo_doc'] ) {
 			$periodo = sanitize_text_field( wp_unslash( $_GET['filtro_periodo_doc'] ) );
 			$query->set(
 				'meta_query',

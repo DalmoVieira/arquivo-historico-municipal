@@ -15,6 +15,21 @@
 	var pageNum = 1;
 	var scale = 1.2;
 
+	function getSafeHttpUrl(candidate) {
+		if (!candidate) {
+			return '';
+		}
+		try {
+			var parsed = new URL(candidate, window.location.origin);
+			if (parsed.protocol === 'http:' || parsed.protocol === 'https:') {
+				return parsed.href;
+			}
+		} catch (e) {
+			return '';
+		}
+		return '';
+	}
+
 	function setLoading(show) {
 		if (!loadingEl) return;
 		loadingEl.style.display = show ? 'block' : 'none';
@@ -44,18 +59,20 @@
 
 	function fallbackDownload() {
 		setLoading(false);
-		if (url) {
-			window.location.href = url;
+		var safeUrl = getSafeHttpUrl(url);
+		if (safeUrl) {
+			window.location.href = safeUrl;
 		}
 	}
 
-	if (!window.pdfjsLib || !url) {
+	var safePdfUrl = getSafeHttpUrl(url);
+	if (!window.pdfjsLib || !safePdfUrl) {
 		fallbackDownload();
 		return;
 	}
 
-	window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.worker.min.mjs';
-	window.pdfjsLib.getDocument(url).promise.then(function (pdf) {
+	window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.5.136/pdf.worker.min.js';
+	window.pdfjsLib.getDocument(safePdfUrl).promise.then(function (pdf) {
 		pdfDoc = pdf;
 		renderPage(pageNum);
 	}).catch(function () {
