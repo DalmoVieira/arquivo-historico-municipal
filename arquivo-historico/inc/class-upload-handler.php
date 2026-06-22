@@ -82,7 +82,7 @@ class Arquivo_Historico_Upload {
 		}
 
 		if ( ! file_exists( $file ) && is_writable( $dir ) ) {
-			$conteudo  = "<FilesMatch \\.(php|phtml|php3|php4|php5|php7|php8|phar)$>\nDeny from all\n</FilesMatch>\n";
+			$conteudo  = "<IfModule mod_authz_core.c>\n<FilesMatch \\.(php|phtml|php3|php4|php5|php7|php8|phar)$>\nRequire all denied\n</FilesMatch>\n</IfModule>\n<IfModule !mod_authz_core.c>\n<FilesMatch \\.(php|phtml|php3|php4|php5|php7|php8|phar)$>\nDeny from all\n</FilesMatch>\n</IfModule>\n";
 			$escreveu  = file_put_contents( $file, $conteudo );
 			if ( false === $escreveu ) {
 				error_log( 'Arquivo Histórico: falha ao gerar .htaccess de proteção em uploads.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log

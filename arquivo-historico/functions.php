@@ -121,6 +121,21 @@ function arquivo_historico_max_upload_size() {
 }
 
 /**
+ * Faixa de décadas disponíveis para o acervo.
+ *
+ * @return array{inicio:int,fim:int,passo:int}
+ */
+function arquivo_historico_periodo_range() {
+	$range = array(
+		'inicio' => 1800,
+		'fim'    => 2020,
+		'passo'  => 10,
+	);
+
+	return apply_filters( 'arquivo_historico_periodo_range', $range );
+}
+
+/**
  * Compatibilidade com page builders.
  */
 function arquivo_historico_builder_compatibility() {

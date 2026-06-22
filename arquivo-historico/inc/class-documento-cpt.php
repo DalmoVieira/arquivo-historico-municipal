@@ -108,6 +108,11 @@ class Arquivo_Historico_CPT {
 			'_palavras_chave'      => get_post_meta( $post->ID, '_palavras_chave', true ),
 			'_periodo_historico'   => get_post_meta( $post->ID, '_periodo_historico', true ),
 		);
+		$range  = function_exists( 'arquivo_historico_periodo_range' ) ? arquivo_historico_periodo_range() : array(
+			'inicio' => 1800,
+			'fim'    => 2020,
+			'passo'  => 10,
+		);
 		?>
 		<p>
 			<label for="_data_documento"><strong><?php esc_html_e( 'Data do Documento', 'arquivo-historico' ); ?></strong></label><br>
@@ -136,7 +141,7 @@ class Arquivo_Historico_CPT {
 			<label for="_periodo_historico"><strong><?php esc_html_e( 'Período Histórico', 'arquivo-historico' ); ?></strong></label><br>
 			<select id="_periodo_historico" name="_periodo_historico">
 				<option value=""><?php esc_html_e( 'Selecione', 'arquivo-historico' ); ?></option>
-				<?php for ( $ano = 1800; $ano <= 2020; $ano += 10 ) : ?>
+				<?php for ( $ano = (int) $range['inicio']; $ano <= (int) $range['fim']; $ano += (int) $range['passo'] ) : ?>
 					<?php $valor = $ano . '-' . ( $ano + 9 ); ?>
 					<option value="<?php echo esc_attr( $valor ); ?>" <?php selected( $campos['_periodo_historico'], $valor ); ?>>
 						<?php echo esc_html( $valor ); ?>
@@ -242,7 +247,13 @@ class Arquivo_Historico_CPT {
 		wp_nonce_field( 'arquivo_historico_filtro_periodo', 'arquivo_historico_filtro_periodo_nonce' );
 		echo '<select name="filtro_periodo_doc">';
 		echo '<option value="">' . esc_html__( 'Todos os períodos', 'arquivo-historico' ) . '</option>';
-		for ( $ano = 1800; $ano <= 2020; $ano += 10 ) {
+		$range = function_exists( 'arquivo_historico_periodo_range' ) ? arquivo_historico_periodo_range() : array(
+			'inicio' => 1800,
+			'fim'    => 2020,
+			'passo'  => 10,
+		);
+
+		for ( $ano = (int) $range['inicio']; $ano <= (int) $range['fim']; $ano += (int) $range['passo'] ) {
 			$valor = $ano . '-' . ( $ano + 9 );
 			echo '<option value="' . esc_attr( $valor ) . '" ' . selected( $periodo_atual, $valor, false ) . '>' . esc_html( $valor ) . '</option>';
 		}

@@ -105,7 +105,13 @@ class Arquivo_Historico_Taxonomias {
 			)
 		);
 
-		for ( $ano = 1800; $ano <= 2020; $ano += 10 ) {
+		$range = function_exists( 'arquivo_historico_periodo_range' ) ? arquivo_historico_periodo_range() : array(
+			'inicio' => 1800,
+			'fim'    => 2020,
+			'passo'  => 10,
+		);
+
+		for ( $ano = (int) $range['inicio']; $ano <= (int) $range['fim']; $ano += (int) $range['passo'] ) {
 			$decada = $ano . '-' . ( $ano + 9 );
 			if ( ! term_exists( $decada, 'periodo_doc' ) ) {
 				wp_insert_term( $decada, 'periodo_doc' );
