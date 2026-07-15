@@ -1,0 +1,22 @@
+#arquivo_historico_bulk_status p {
+  margin: 0 0 .5rem;
+  padding: .5rem;
+  background: #fff;
+  border-left: 4px solid #6b3f1d;
+}
+
+#arquivo_historico_bulk_status progress {
+  width: 100%;
+  height: 12px;
+  margin-bottom: .75rem;
+}
+
+#arquivo_historico_meta_documento label {
+  display: block;
+  margin-bottom: .35rem;
+}
+
+#arquivo_historico_meta_documento input,
+#arquivo_historico_meta_documento select {
+  max-width: 500px;
+}
